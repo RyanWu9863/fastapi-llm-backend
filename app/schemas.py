@@ -31,6 +31,30 @@ class JobInfo(BaseModel):
     min_years: int | None = Field(ge=0, le=50, description="最低年資要求（年）；沒提到為 null")
 
 
+class DocumentOut(BaseModel):
+    document_id: str
+    filename: str
+    chunks: int = Field(description="切成幾塊")
+
+
+class AskRequest(BaseModel):
+    question: str = Field(min_length=1, max_length=1000)
+    top_k: int = Field(default=4, ge=1, le=10, description="檢索幾個最相關的片段")
+
+
+class Source(BaseModel):
+    document_id: str
+    filename: str
+    chunk_index: int
+    text: str
+    distance: float = Field(description="cosine 距離，越小越相關（0 表示完全相同）")
+
+
+class AskResponse(BaseModel):
+    answer: str
+    sources: list[Source] = Field(description="回答中實際引用到的片段")
+
+
 class MessageOut(BaseModel):
     # from_attributes=True：允許直接從 ORM 物件（用屬性存取）轉成 Pydantic model
     model_config = ConfigDict(from_attributes=True)

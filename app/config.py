@@ -16,5 +16,9 @@ class Settings(BaseSettings):
     # aiosqlite 是 SQLite 的 async 驅動；之後換 PostgreSQL 只要改這串
     database_url: str = "sqlite+aiosqlite:///./app.db"
 
+    # RAG：把文字轉成向量的模型，跟 llm_model 一樣不給預設值
+    embedding_model: str
+    chroma_path: str = "./chroma_data"
+
 
 settings = Settings()

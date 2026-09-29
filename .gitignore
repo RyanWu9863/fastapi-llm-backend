@@ -15,3 +15,6 @@ __pycache__/
 # 編輯器
 .vscode/
 .idea/
+
+# Chroma 向量資料庫
+chroma_data/

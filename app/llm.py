@@ -8,6 +8,8 @@ from app.config import settings
 # 整個 app 共用一個 client：它內部有連線池，每次請求都重建會浪費資源
 _client = AsyncOpenAI(base_url=settings.llm_base_url, api_key=settings.llm_api_key)
 
+EMBED_BATCH_SIZE = 32
+
 
 class LLMError(Exception):
     """LLM 呼叫失敗。router 只需要認得這個例外，不必知道底層用哪家 SDK。"""
@@ -56,6 +58,20 @@ async def chat(
     except openai.APIError as e:
         raise LLMError(str(e)) from e
     return resp.choices[0].message.content or ""
+
+
+async def embed(texts: list[str]) -> list[list[float]]:
+    """把多段文字轉成向量，順序跟輸入一致；分批送出，避免單一請求太大。"""
+    vectors = []
+    try:
+        for i in range(0, len(texts), EMBED_BATCH_SIZE):
+            resp = await _client.embeddings.create(
+                model=settings.embedding_model, input=texts[i : i + EMBED_BATCH_SIZE]
+            )
+            vectors.extend(d.embedding for d in resp.data)
+    except openai.APIError as e:
+        raise LLMError(str(e)) from e
+    return vectors
 
 
 async def stream_chat(messages: list[dict], system: str) -> AsyncIterator[str]:
