@@ -17,6 +17,20 @@ class ChatResponse(BaseModel):
     reply: str
 
 
+class JobParseRequest(BaseModel):
+    # 限制長度：輸入越長 token 越多，避免有人丟整本書進來燒成本
+    description: str = Field(min_length=1, max_length=5000, description="職缺描述全文")
+
+
+class JobInfo(BaseModel):
+    """同時扮演兩個角色：產生給 LLM 的 JSON schema，以及驗證 LLM 的輸出。"""
+
+    title: str = Field(min_length=1, description="職稱，照原文")
+    required_skills: list[str] = Field(description="必備技能")
+    nice_to_have_skills: list[str] = Field(description="加分技能")
+    min_years: int | None = Field(ge=0, le=50, description="最低年資要求（年）；沒提到為 null")
+
+
 class MessageOut(BaseModel):
     # from_attributes=True：允許直接從 ORM 物件（用屬性存取）轉成 Pydantic model
     model_config = ConfigDict(from_attributes=True)

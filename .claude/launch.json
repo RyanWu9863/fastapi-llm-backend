@@ -4,7 +4,7 @@
     {
       "name": "fastapi-dev",
       "runtimeExecutable": ".venv/Scripts/fastapi.exe",
-      "runtimeArgs": ["dev", "app/main.py"],
+      "runtimeArgs": ["dev", "app/main.py", "--no-reload"],
       "port": 8000
     }
   ]
