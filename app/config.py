@@ -13,5 +13,8 @@ class Settings(BaseSettings):
     # 思考模式強度，例如 "none" 可關掉 qwen3 的思考；不設定就不傳給 API
     llm_reasoning_effort: str | None = None
 
+    # aiosqlite 是 SQLite 的 async 驅動；之後換 PostgreSQL 只要改這串
+    database_url: str = "sqlite+aiosqlite:///./app.db"
+
 
 settings = Settings()
