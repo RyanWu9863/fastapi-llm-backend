@@ -1,0 +1,3 @@
+# 開發和測試才需要的套件；Docker image 只裝 requirements.txt，不會包含這些
+-r requirements.txt
+pytest==9.1.1

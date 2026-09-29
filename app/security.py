@@ -38,14 +38,17 @@ class RateLimiter:
     每個 process 各算各的，要改用 Redis 這類共用儲存。
     """
 
-    def __init__(self, limit: int, window: float = 60.0):
+    def __init__(self, limit: int, window: float = 60.0, clock=time.monotonic):
         self.limit = limit
         self.window = window
+        # 時鐘可以從外面傳入：測試時換成假時鐘，就能模擬「過了 60 秒」而不用真的等
+        # 預設用 monotonic 而不是 time.time()：不受系統校時影響
+        self._clock = clock
         self._hits: dict[str, deque[float]] = defaultdict(deque)
 
     def check(self, client_id: str) -> float | None:
         """允許就記一筆並回傳 None；拒絕就回傳還要等幾秒。"""
-        now = time.monotonic()  # 用 monotonic 而不是 time.time()：不受系統校時影響
+        now = self._clock()
         hits = self._hits[client_id]
         while hits and hits[0] <= now - self.window:
             hits.popleft()  # 丟掉視窗外的舊紀錄

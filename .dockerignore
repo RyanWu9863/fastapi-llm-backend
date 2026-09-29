@@ -1,0 +1,11 @@
+# 不送進 Docker build：.env 有機密，絕對不能打包進 image；其他是本機資料或開發用檔案
+.env
+.venv/
+*.db
+chroma_data/
+__pycache__/
+.pytest_cache/
+.git/
+.claude/
+tests/
+samples/
