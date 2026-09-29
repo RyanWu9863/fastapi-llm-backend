@@ -18,3 +18,6 @@ __pycache__/
 
 # Chroma 向量資料庫
 chroma_data/
+
+# Claude Code 本機設定（預覽伺服器用）
+.claude/
