@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "fastapi-dev",
+      "runtimeExecutable": ".venv/Scripts/fastapi.exe",
+      "runtimeArgs": ["dev", "app/main.py"],
+      "port": 8000
+    }
+  ]
+}
