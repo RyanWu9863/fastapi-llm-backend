@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 
+from app.routers import chat
+
 app = FastAPI(title="FastAPI LLM 練習專案")
+app.include_router(chat.router)
 
 
 @app.get("/health")

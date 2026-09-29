@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     llm_api_key: str = "ollama"
     # 模型名稱沒有預設值：沒設定就啟動失敗，避免不小心用錯模型
     llm_model: str
+    # 思考模式強度，例如 "none" 可關掉 qwen3 的思考；不設定就不傳給 API
+    llm_reasoning_effort: str | None = None
 
 
 settings = Settings()
